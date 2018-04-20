@@ -1,0 +1,5 @@
+---
+- name: Update server
+  apt: 
+    name: "*"
+    state: latest

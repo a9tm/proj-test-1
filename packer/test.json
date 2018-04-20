@@ -1,0 +1,29 @@
+{
+	"variables": {
+		"aws_profile": "{{ env `AWS_PROFILE` }}",
+		"aws_region": "us-west-2",
+		"test_ami_name": "test-packer-{{timestamp}}"
+	},
+
+	"builders": [{
+		"type": "amazon-ebs",
+		"profile": "{{ user `aws_profile` }}",
+		"region": "{{  user `aws_region` }}",
+		"source_ami": "ami-a0f247d8",
+		"instance_type": "t2.micro",
+		"ssh_username": "admin",
+		"ami_name": "{{ user `test_ami_name`}}",
+		"tags": [{
+			"Name": "{{ user `test_ami_name` }}"
+		}]
+	}],
+
+	"provisioners": [{
+		"type": "shell",
+		"inline": [
+			"sudo DEBIAN_FRONTEND=noninteractive apt update -y",
+			"sudo DEBIAN_FRONTEND=noninteractive apt upgrade -y",
+			"sudo DEBIAN_FRONTEND=noninteractive apt autoremove -y",
+		]
+	}]
+}
